@@ -1,0 +1,40 @@
+{
+  "name": "pi4",
+  "version": "1.0.0",
+  "description": "Pi4 Code",
+  "private": true,
+  "engines": {
+    "node": ">=16",
+    "npm": ">=8"
+  },
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "ci": "npm run clean && npm install",
+    "clean": "npm run clean --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "postclean": "rm -rf ./node_modules",
+    "postinstall": "npm run build",
+    "prettier": "npm run prettier --workspaces --if-present",
+    "prettier:fix": "npm run prettier:fix --workspaces --if-present",
+    "start": "npm run start --workspaces --if-present"
+  },
+  "author": "Joshua Hansen <iamjoshhansen@gmail.com>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
+    "eslint": "^7.9.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-eslint-plugin": "^2.3.0",
+    "typescript": "^4.4.3"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/utils",
+      "packages/gpio",
+      "packages/cpu-fan",
+      "packages/api",
+      "packages/ui"
+    ]
+  }
+}

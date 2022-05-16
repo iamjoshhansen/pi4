@@ -1,0 +1,53 @@
+<div *ngIf="(loadState$ | async) === LoadState.loading">Loading</div>
+<div *ngIf="(loadState$ | async) === LoadState.error">{{ error?.status }}</div>
+
+<!-- EMPTY STATE -->
+<section
+  *ngIf="
+    (loadState$ | async) === LoadState.ready && !(checkedOutItemsCount$ | async)
+  "
+  class="empty"
+>
+  <span style="font-size: 2.9em">no books</span>
+  <span>are currently checked out</span>
+</section>
+
+<section
+  *ngIf="
+    (loadState$ | async) === LoadState.ready && (checkedOutItemsCount$ | async)
+  "
+>
+  <h2 class="status-header">Library Items</h2>
+
+  <ng-container *ngFor="let section of checkedOutItems$ | async">
+    <h3 class="section-header">{{ section.due | date: "EE, MMM dd" }}</h3>
+
+    <table class="book-table">
+      <!-- <thead>
+        <tr>
+          <th class="book-table__cell book-table__cell--header" colspan="2">
+            Title
+          </th>
+        </tr>
+      </thead> -->
+      <tbody>
+        <tr *ngFor="let item of section.items">
+          <!-- <td class="book-table__cell">•</td> -->
+          <td class="book-table__cell book-table__cell--owner">
+            <img
+              class="owner-image"
+              [attr.src]="'./assets/' + item.owner + '.jpeg'"
+            />
+          </td>
+          <td class="book-table__cell">
+            <div class="title">{{ item.title }}</div>
+            <!-- <div class="subtitle" *ngFor="let subtitle of item.subtitles">
+              {{ subtitle }}
+            </div> -->
+            <!-- <div class="subtitle">{{ item.barcode }}</div> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+</section>
