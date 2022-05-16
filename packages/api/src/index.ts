@@ -1,21 +1,23 @@
+import { FanCPU } from '@pi4/cpu-fan';
+import { fanPin, maxTemp, minTemp } from '@pi4/env';
 import cors from 'cors';
 import express, { Request, Response } from 'express';
 import { readFileSync } from 'fs';
+
+import { Cache } from './cache';
+import { Book, BookOwner, getBooks } from './get-books';
 import {
   getLibraryCardCollection,
   LibraryCardOwner,
 } from './mongo/library-cards';
-
-import { Cache } from './cache';
-import { Book, BookOwner, getBooks } from './get-books';
-import { FanCPU } from '@pi4/cpu-fan';
-import { fanPin } from '@pi4/env';
 
 const app = express();
 app.use(cors());
 
 const fan = new FanCPU({
   pin: fanPin,
+  maxTemp,
+  minTemp,
 });
 
 fan.run();

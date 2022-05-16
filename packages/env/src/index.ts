@@ -16,6 +16,8 @@ export const mongoUri = process.env.mongoUri!;
 export const dbName = process.env.dbName!;
 export const dev = asBoolean(process.env.dev)!;
 export const fanPin = asNumber(process.env.fanPin)!;
+export const maxTemp = asNumber(process.env.maxTemp)!;
+export const minTemp = asNumber(process.env.minTemp)!;
 
 const missing = new Set<string>();
 
@@ -30,7 +32,7 @@ function check(prop: Record<string, any>) {
   }
 }
 
-check({ mongoUri, dbName, dev, fanPin });
+check({ mongoUri, dbName, dev, fanPin, minTemp, maxTemp });
 
 if (missing.size > 0) {
   throw new Error(

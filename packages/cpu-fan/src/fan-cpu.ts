@@ -23,6 +23,8 @@ export class FanCPU {
   }
 
   run() {
+    this.active = false;
+
     setInterval(() => {
       const temp = this.temp;
       console.log(`Temp: ${temp}`);
