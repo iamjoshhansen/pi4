@@ -14,7 +14,7 @@ const app = express();
 app.use(cors());
 
 const fan = new FanCPU({
-  pin: 18,
+  pin: 24,
 });
 
 fan.run();
