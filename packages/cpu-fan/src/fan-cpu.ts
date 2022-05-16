@@ -22,8 +22,12 @@ export class FanCPU {
 
   run() {
     const pin = new OutputPin(this.pin);
-    pin.write(true);
-    console.log(`CPU Fan is running (pin ${this.pin})`);
+    setInterval(() => {
+      pin.state = !pin.state;
+      console.log(
+        `CPU Fan is${pin.state ? ' (not)' : ''} running (pin ${this.pin})`,
+      );
+    }, 1000);
   }
 
   get temp(): number {
