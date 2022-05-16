@@ -1,5 +1,5 @@
 import { MongoClient, Db } from 'mongodb';
-import { mongoUri, dbName } from '../env';
+import { mongoUri, dbName } from '@pi4/env';
 
 export const database = new Promise<Db>(async resolve => {
   const client = new MongoClient(mongoUri, {

@@ -29,7 +29,7 @@ export class FanCPU {
   get temp(): number {
     const path = '/sys/class/thermal/thermal_zone0/temp';
     if (!existsSync(path)) {
-      return undefined;
+      return;
     }
     const rawTemp = readFileSync(path).toString();
     const temp = parseInt(rawTemp, 10);

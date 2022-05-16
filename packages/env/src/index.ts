@@ -6,9 +6,15 @@ require('dotenv').config({ path });
 export const mongoUri = process.env.mongoUri!;
 export const dbName = process.env.dbName!;
 
+export const dev =
+  typeof process.env.dev === 'undefined'
+    ? undefined
+    : process.env.dev === 'true';
+
 const missing = new Set<string>();
 
 function check(prop: Record<string, any>) {
+  // console.log(prop);
   const keys = Object.keys(prop);
   for (const key of keys) {
     const val = prop[key];
@@ -18,7 +24,7 @@ function check(prop: Record<string, any>) {
   }
 }
 
-check({ mongoUri, dbName });
+check({ mongoUri, dbName, dev });
 
 if (missing.size > 0) {
   throw new Error(

@@ -1,7 +1,7 @@
 {
-  "name": "@pi4/gpio",
+  "name": "@pi4/env",
   "version": "1.0.0",
-  "description": "GPIO access for the Pi",
+  "description": "Environment variables for Pi4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -21,6 +21,6 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
-    "onoff": "^6.0.3"
+    "dotenv": "^16.0.1"
   }
 }

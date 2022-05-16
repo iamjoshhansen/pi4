@@ -109,7 +109,9 @@ app.get('/db', async (_req: Request, res: Response) => {
 });
 
 app.get('/temp', async (_req: Request, res: Response) => {
-  res.send(fan.temp || 'unknown');
+  res.json({
+    temp: fan.temp ?? null,
+  });
 });
 
 const port = 3000;

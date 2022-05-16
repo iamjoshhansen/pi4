@@ -30,6 +30,7 @@
   },
   "workspaces": {
     "packages": [
+      "packages/env",
       "packages/utils",
       "packages/gpio",
       "packages/cpu-fan",

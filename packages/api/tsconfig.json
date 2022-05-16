@@ -16,6 +16,9 @@
   },
   "references": [
     {
+      "path": "../env/tsconfig.json"
+    },
+    {
       "path": "../utils/tsconfig.json"
     },
     {
