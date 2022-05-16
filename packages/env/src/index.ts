@@ -3,13 +3,19 @@ import { resolve } from 'path';
 const path = resolve(__dirname + '../../../../.env');
 // console.log({ path });
 require('dotenv').config({ path });
+
+function asBoolean(val: any) {
+  return typeof val === 'undefined' ? undefined : val === 'true';
+}
+
+function asNumber(val: any) {
+  return typeof val === 'undefined' ? undefined : parseInt(val, 10);
+}
+
 export const mongoUri = process.env.mongoUri!;
 export const dbName = process.env.dbName!;
-
-export const dev =
-  typeof process.env.dev === 'undefined'
-    ? undefined
-    : process.env.dev === 'true';
+export const dev = asBoolean(process.env.dev)!;
+export const fanPin = asNumber(process.env.fanPin)!;
 
 const missing = new Set<string>();
 
@@ -24,7 +30,7 @@ function check(prop: Record<string, any>) {
   }
 }
 
-check({ mongoUri, dbName, dev });
+check({ mongoUri, dbName, dev, fanPin });
 
 if (missing.size > 0) {
   throw new Error(

@@ -9,12 +9,13 @@ import {
 import { Cache } from './cache';
 import { Book, BookOwner, getBooks } from './get-books';
 import { FanCPU } from '@pi4/cpu-fan';
+import { fanPin } from '@pi4/env';
 
 const app = express();
 app.use(cors());
 
 const fan = new FanCPU({
-  pin: 24,
+  pin: fanPin,
 });
 
 fan.run();

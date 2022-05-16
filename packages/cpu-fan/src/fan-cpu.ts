@@ -5,6 +5,7 @@ export class FanCPU {
   public readonly pin: number;
   public maxTemp: number;
   public minTemp: number;
+  private readonly io: OutputPin;
 
   constructor({
     pin,
@@ -18,16 +19,28 @@ export class FanCPU {
     this.pin = pin;
     this.maxTemp = maxTemp;
     this.minTemp = minTemp;
+    this.io = new OutputPin(this.pin);
   }
 
   run() {
-    const pin = new OutputPin(this.pin);
     setInterval(() => {
-      pin.state = !pin.state;
-      console.log(
-        `CPU Fan is${pin.state ? ' (not)' : ''} running (pin ${this.pin})`,
-      );
+      const temp = this.temp;
+      console.log(`Temp: ${temp}`);
+      if (temp > this.maxTemp && !this.active) {
+        this.active = true;
+        console.log(`turning fan on`);
+      } else if (temp < this.minTemp && this.active) {
+        this.active = false;
+        console.log(`turning fan off`);
+      }
     }, 1000);
+  }
+
+  private set active(val: boolean) {
+    this.io.write(val);
+  }
+  private get active() {
+    return this.io.state;
   }
 
   get temp(): number {
