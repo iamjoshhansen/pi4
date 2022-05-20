@@ -1,0 +1,23 @@
+{
+  "name": "@pi4/interfaces",
+  "version": "1.0.0",
+  "description": "Shared Typescript Interfaces",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "x-prebuild": "npm run clean",
+    "build": "tsc -b",
+    "build:watch": "npm run build -- -w",
+    "clean": "rm -rf dist && rm -rf *.tsbuildinfo && rm -rf node_modules",
+    "lint": "../../node_modules/.bin/eslint --ignore-path ../../.eslintignore . --ext .js,.ts",
+    "lint:fix": "npm run lint -- --fix",
+    "prettier": "../../node_modules/.bin/prettier --check \"src/**/*.ts\"",
+    "prettier:fix": "npm run prettier -- --write"
+  },
+  "private": true,
+  "author": "Joshua Hansen <iamjoshhansen@gmail.com>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "typescript": "^4.4.3"
+  }
+}

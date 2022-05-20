@@ -16,6 +16,9 @@
   },
   "references": [
     {
+      "path": "../interfaces/tsconfig.json"
+    },
+    {
       "path": "../env/tsconfig.json"
     },
     {

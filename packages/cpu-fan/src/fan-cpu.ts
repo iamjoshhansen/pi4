@@ -27,7 +27,7 @@ export class FanCPU {
 
     setInterval(() => {
       const temp = this.temp;
-      console.log(`Temp: ${temp}`);
+      // console.log(`Temp: ${temp}`);
       if (temp > this.maxTemp && !this.active) {
         this.active = true;
         console.log(`turning fan on`);

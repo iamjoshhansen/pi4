@@ -1,26 +1,13 @@
+import {
+  LibraryItemBarcode,
+  LibraryItemDue,
+  LibraryItemRow,
+  LibraryItemSubtitle,
+  LibraryItemTitle,
+  LibraryItemVolume,
+  LibraryOwnerId,
+} from '@pi4/interfaces';
 import puppeteer, { Page } from 'puppeteer';
-
-export enum BookStatus {
-  out = 'checked-out',
-  available = 'available',
-  pendingHold = 'pending',
-}
-
-export type BookTitle = string & { __brand: 'BookTitle' };
-export type BookSubtitle = string & { __brand: 'Subtitle' };
-export type BookDueDate = string & { __brand: 'DueDate' };
-export type BookOwner = string & { __brand: 'Owner' };
-export type BookBarcode = string & { __brand: 'Barcode' };
-export type BookVolume = string & { __brand: 'Volume' };
-
-export interface Book {
-  title: BookTitle;
-  status: BookStatus;
-  subtitles?: BookSubtitle[];
-  due?: BookDueDate;
-  barcode?: BookBarcode;
-  volume?: BookVolume;
-}
 
 class Stepper {
   private i = 0;
@@ -31,15 +18,22 @@ class Stepper {
 }
 
 const getScreenshots = true;
-const logStep = (msg: string) => {
-  console.log(msg);
-};
-// const logStep = (_msg: string) => {};
+
+const logActive = false;
+
+const logStep = (() => {
+  if (logActive) {
+    return (msg: string) => {
+      console.log(msg);
+    };
+  }
+  return (_msg: string) => {};
+})();
 
 class ScreenShooter {
   private readonly prefix = new Date().getTime();
   private readonly step = new Stepper();
-  constructor(private readonly page: puppeteer.Page, public enabled = true) {}
+  constructor(private readonly page: Page, public enabled = true) {}
 
   async snap(label: string) {
     await this.page.screenshot({
@@ -89,7 +83,7 @@ export async function getBooks(card: string, pin: string) {
 
   async function getItemsOnPage() {
     return await page.evaluate(() => {
-      const books: Book[] = [];
+      const books: Omit<LibraryItemRow, 'ownerId'>[] = [];
       // const books: any[] = [];
       const rows = document.querySelectorAll('tr.patFuncEntry');
       for (const row of rows) {
@@ -101,48 +95,47 @@ export async function getBooks(card: string, pin: string) {
         ).trim();
         const barcode = (
           row.querySelector('.patFuncBarcode')?.innerHTML ?? ''
-        ).trim() as BookBarcode;
+        ).trim() as LibraryItemBarcode;
         const volume = (
           row.querySelector('.patFuncVol')?.innerHTML ?? ''
-        ).trim() as BookVolume;
+        ).trim() as LibraryItemVolume;
 
         const titleSplit = titleAndSubtitle.indexOf('/');
         const title = (
           titleSplit === -1
             ? titleAndSubtitle
             : titleAndSubtitle.substring(0, titleSplit)
-        ).trim() as BookTitle;
+        ).trim() as LibraryItemTitle;
         const subtitles = (
           titleSplit === -1 ? '' : titleAndSubtitle.substring(titleSplit + 1)
         )
           .split(';')
-          .map(st => st.trim() as BookSubtitle);
+          .map(st => st.trim() as LibraryItemSubtitle);
 
-        enum BookStatus {
-          out = 'checked-out',
+        enum LibraryItemStatus {
+          checkedOut = 'checked-out',
+          returned = 'returned',
           available = 'available',
           pendingHold = 'pending',
         }
 
         const status = due.match(/\d+ of \d+ holds/)
-          ? BookStatus.pendingHold
-          : BookStatus.out;
+          ? LibraryItemStatus.pendingHold
+          : LibraryItemStatus.checkedOut;
 
         const [m, d, y] = due
           .substring(4, 12)
           .split('-')
           .map(x => parseInt(x, 10));
-        const dueDate = new Date(
-          y + 2000,
-          m - 1,
-          d,
-        ).toDateString() as BookDueDate;
+        const dueDate = new Date(y + 2000, m - 1, d)
+          .toISOString()
+          .substring(0, 10) as LibraryItemDue;
         books.push({
           title,
           subtitles,
           status,
           barcode,
-          volume,
+          volume: volume ? volume : undefined,
           due: dueDate,
         });
       }

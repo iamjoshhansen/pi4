@@ -35,8 +35,8 @@
     "strictTemplates": true
   },
   "references": [
-    // {
-    //   "path": "packages/interfaces/tsconfig.json"
-    // }
+    {
+      "path": "../interfaces/tsconfig.json"
+    }
   ]
 }

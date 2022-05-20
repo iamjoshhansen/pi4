@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { copy } from '@pi4/utils';
 import {
   BehaviorSubject,
   catchError,
@@ -12,13 +13,8 @@ import {
   takeUntil,
 } from 'rxjs';
 import { LoadState } from 'src/app/enums/load-state';
-import {
-  BooksService,
-  BookSubtitle,
-  BookTitle,
-  KnownBook,
-} from 'src/app/services/books.service';
-import { copy } from '@pi4/utils';
+import { LibraryItemsService } from 'src/app/services/library-items.service';
+import { LibraryItemsApiResponse } from '@pi4/interfaces';
 
 @Component({
   selector: 'app-home-page',
@@ -37,25 +33,26 @@ export class HomePageComponent implements OnInit, OnDestroy {
   );
   error?: HttpErrorResponse;
 
-  private readonly dataSubject = new BehaviorSubject<KnownBook[] | null>(null);
+  private readonly dataSubject =
+    new BehaviorSubject<LibraryItemsApiResponse | null>(null);
   public readonly data$ = this.dataSubject.pipe(
     filter((x) => x !== null),
     distinctUntilChanged()
-  ) as unknown as Observable<KnownBook[]>;
+  ) as unknown as Observable<LibraryItemsApiResponse>;
 
   checkedOutItems$ = this.data$.pipe(
     // map((items) => items.filter((item) => item.status === BookStatus.out))
-    map((items) => {
-      const dates = [...new Set(items.map((item) => item.due))].sort();
+    map((data) => {
+      const dates = [...new Set(data.items.map((item) => item.due))].sort();
       return dates.map((due) => ({
         due,
-        items: items
+        items: data.items
           .filter((item) => item.due === due)
-          .map((item) => {
-            const book = copy(item);
-            delete book.due;
-            return book;
-          })
+          // .map((row) => {
+          //   const book = copy(row);
+          //   delete book.due;
+          //   return book;
+          // })
           .sort((a, b) =>
             a.title.toLowerCase().localeCompare(b.title.toLowerCase())
           ),
@@ -66,11 +63,11 @@ export class HomePageComponent implements OnInit, OnDestroy {
     map((items) => items?.length || 0)
   );
 
-  constructor(private booksService: BooksService) {}
+  constructor(private libraryItemsService: LibraryItemsService) {}
 
   ngOnInit(): void {
     this.loadStateSubject.next(LoadState.loading);
-    this.booksService
+    this.libraryItemsService
       .fetch()
       .pipe(
         takeUntil(this.destroyed),
