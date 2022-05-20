@@ -6,14 +6,14 @@ export function initUi(app: Express) {
   app.use(bodyParser.json());
 
   const dist = path.resolve(__dirname + '/../../ui/dist/ui/');
-  console.log({ dist });
+  // console.log({ dist });
   app.use(express.static(dist));
 
   app.get(['/app', '/app/*'], (req: Request, res: Response) => {
     const file = req.path.substring(4) || 'index.html';
 
     const finalPath = path.join(dist, file);
-    console.log({ file, finalPath });
+    // console.log({ file, finalPath });
     res.sendFile(finalPath);
   });
 }
