@@ -10,7 +10,7 @@ export class LibraryItemsService {
 
   fetch() {
     return this.http.get<LibraryItemsApiResponse>(
-      'http://localhost:3000/library/items'
+      `http://${window.location.host}/library/items`
     );
   }
 }
