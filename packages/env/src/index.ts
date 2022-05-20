@@ -12,12 +12,13 @@ function asNumber(val: any) {
   return typeof val === 'undefined' ? undefined : parseInt(val, 10);
 }
 
+export const port = asNumber(process.env.port)!;
 export const mongoUri = process.env.mongoUri!;
 export const dbName = process.env.dbName!;
 export const dev = asBoolean(process.env.dev)!;
 export const fanPin = asNumber(process.env.fanPin)!;
-export const maxTemp = asNumber(process.env.maxTemp)!;
 export const minTemp = asNumber(process.env.minTemp)!;
+export const maxTemp = asNumber(process.env.maxTemp)!;
 
 const missing = new Set<string>();
 
@@ -32,7 +33,7 @@ function check(prop: Record<string, any>) {
   }
 }
 
-check({ mongoUri, dbName, dev, fanPin, minTemp, maxTemp });
+check({ port, mongoUri, dbName, dev, fanPin, minTemp, maxTemp });
 
 if (missing.size > 0) {
   throw new Error(

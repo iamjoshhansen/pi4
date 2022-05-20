@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express from 'express';
+import { port } from '@pi4/env';
 
 import { initFan } from './fan';
 import { initUi } from './ui';
@@ -13,6 +14,5 @@ initLibrary(app);
 
 initUi(app);
 
-const port = 3000;
 app.listen(port);
 console.log(`Listening on http://localhost:${port}/`);
