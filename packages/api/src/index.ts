@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 
 import { initFan } from './fan';
+import { initUi } from './ui';
 import { initLibrary } from './library';
 
 const app = express();
@@ -10,18 +11,7 @@ app.use(cors());
 initFan(app);
 initLibrary(app);
 
-// app.get('/db', async (_req: Request, res: Response) => {
-//   const libraryCardCollection = await getLibraryCardCollection();
-
-//   const owners: LibraryCardOwner[] = [];
-
-//   const rows = await libraryCardCollection.find({});
-//   for await (const row of rows) {
-//     owners.push(row.owner);
-//   }
-
-//   res.json(owners);
-// });
+initUi(app);
 
 const port = 3000;
 app.listen(port);

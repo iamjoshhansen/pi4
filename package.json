@@ -16,7 +16,9 @@
     "postinstall": "npm run build",
     "prettier": "npm run prettier --workspaces --if-present",
     "prettier:fix": "npm run prettier:fix --workspaces --if-present",
-    "start": "npm run start --workspaces --if-present"
+    "build:all": "npm run build --workspaces --if-present",
+    "start": "npm run build:all && npm run start:prod",
+    "start:prod": "npm run start:prod --workspace @pi4/api"
   },
   "author": "Joshua Hansen <iamjoshhansen@gmail.com>",
   "license": "UNLICENSED",
