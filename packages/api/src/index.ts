@@ -5,7 +5,7 @@ import { Server } from 'socket.io';
 import http from 'http';
 
 import { initFan } from './fan';
-import { initLibrary } from './library';
+// import { initLibrary } from './library';
 import { initUi } from './ui';
 
 const app = express();
@@ -20,7 +20,7 @@ const io = new Server(server, {
 });
 
 initFan(app, io);
-initLibrary(app);
+// initLibrary(app);
 
 initUi(app);
 

@@ -3,6 +3,15 @@
   padding: 1rem;
 }
 
+.error {
+  text-align: center;
+  font-size: 5em;
+  opacity: 0.8;
+  color: #900;
+  margin: 0.5em 0;
+  font-family: "JetBrains Mono", monospace;
+}
+
 .empty {
   text-align: center;
   opacity: 0.75;

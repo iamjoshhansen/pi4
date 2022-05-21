@@ -1,5 +1,9 @@
+<h2 class="status-header">Library Items</h2>
+
 <div *ngIf="(loadState$ | async) === LoadState.loading">Loading</div>
-<div *ngIf="(loadState$ | async) === LoadState.error">{{ error?.status }}</div>
+<div *ngIf="(loadState$ | async) === LoadState.error" class="error">
+  {{ error?.status }}
+</div>
 
 <!-- EMPTY STATE -->
 <section
@@ -17,8 +21,6 @@
     (loadState$ | async) === LoadState.ready && (checkedOutItemsCount$ | async)
   "
 >
-  <h2 class="status-header">Library Items</h2>
-
   <ng-container *ngFor="let section of checkedOutItems$ | async">
     <h3 class="section-header">{{ section.due | date: "EE, MMM dd" }}</h3>
 
