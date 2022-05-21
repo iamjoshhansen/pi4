@@ -13,6 +13,7 @@ function asNumber(val: any) {
 }
 
 export const port = asNumber(process.env.port)!;
+export const ioPort = asNumber(process.env.ioPort)!;
 export const mongoUri = process.env.mongoUri!;
 export const dbName = process.env.dbName!;
 export const dev = asBoolean(process.env.dev)!;
@@ -33,7 +34,7 @@ function check(prop: Record<string, any>) {
   }
 }
 
-check({ port, mongoUri, dbName, dev, fanPin, minTemp, maxTemp });
+check({ port, ioPort, mongoUri, dbName, dev, fanPin, minTemp, maxTemp });
 
 if (missing.size > 0) {
   throw new Error(

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LibraryItemsApiResponse } from '@pi4/interfaces';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ export class LibraryItemsService {
 
   fetch() {
     return this.http.get<LibraryItemsApiResponse>(
-      `http://${window.location.host}/library/items`
+      `http://${window.location.hostname}:${environment.apiPort}/library/items`
     );
   }
 }
