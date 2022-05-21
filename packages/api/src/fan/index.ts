@@ -24,7 +24,7 @@ export function initFan(app: Express, io: Server) {
 
       let interval = setInterval(() => {
         client.emit(SocketIoEvent.cpuTempChange, fan.temp);
-      }, 100);
+      }, 1000);
 
       client.on('disconnect', () => {
         clearTimeout(interval);
