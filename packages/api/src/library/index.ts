@@ -44,5 +44,5 @@ export function initLibrary(app: Express) {
   void runLibraryItemDataload();
   setInterval(() => {
     void runLibraryItemDataload();
-  }, 1000 * 60 * 60);
+  }, 1000 * 60 * 60 * 24);
 }
