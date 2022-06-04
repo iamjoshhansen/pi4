@@ -7,6 +7,7 @@ import http from 'http';
 import { initFan } from './fan';
 import { initLibrary } from './library';
 import { initUi } from './ui';
+import { initWordle } from './wordle/init-wordle';
 
 const app = express();
 app.use(cors());
@@ -21,6 +22,7 @@ const io = new Server(server, {
 
 initFan(app, io);
 initLibrary(app);
+initWordle(app, io);
 
 initUi(app);
 

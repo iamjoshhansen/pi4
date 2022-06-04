@@ -1,0 +1,27 @@
+<h1 class="title">Wordle</h1>
+
+<div class="controls">
+  <input class="input" [(ngModel)]="bestGuess" />
+  <button class="button" (click)="playWordle()">Play</button>
+</div>
+
+<!-- <ol>
+  <li *ngFor="let event of events">{{ event | json }}</li>
+</ol> -->
+
+<section class="wordle-game">
+  <div *ngFor="let word of guesses" class="wordle-game__row">
+    <span
+      *ngFor="let letter of word"
+      class="wordle-game__row__letter"
+      [class.wordle-game__row__letter--absent]="letter.state === 'absent'"
+      [class.wordle-game__row__letter--present]="letter.state === 'present'"
+      [class.wordle-game__row__letter--correct]="letter.state === 'correct'"
+      >{{ letter.character }}</span
+    >
+  </div>
+</section>
+
+<textarea *ngIf="blocks" class="brag" [value]="blocks"></textarea>
+
+<!-- <pre><code>{{ guesses | json }}</code></pre> -->
