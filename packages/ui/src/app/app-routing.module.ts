@@ -11,14 +11,17 @@ import { WordlePageModule } from './pages/wordle-page/wordle-page.module';
 const routes: Routes = [
   {
     path: '',
+    // title: 'Library',
     component: HomePageComponent,
   },
   {
     path: 'pi4',
+    // title: 'Pi4',
     component: Pi4Component,
   },
   {
     path: 'wordle',
+    // title: 'Wordle Solver',
     component: WordlePageComponent,
   },
 ];
