@@ -6,11 +6,21 @@
 .title {
   text-align: center;
   margin: 0 0 1rem;
+  font-size: 5em;
 }
 
 nav {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 0.25em;
+  font-size: 2em;
+  gap: 0.5em;
+
+  a {
+    text-decoration: none;
+    border: solid 1px #09f;
+    color: #09f;
+    padding: 1ch;
+    display: block;
+  }
 }
