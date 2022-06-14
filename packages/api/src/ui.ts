@@ -9,11 +9,11 @@ export function initUi(app: Express) {
   // console.log({ dist });
   app.use(express.static(dist));
 
-  app.get(['/app', '/app/*'], (_req: Request, res: Response) => {
-    // const file = req.path.substring(4) || 'index.html';
+  app.get(['/app', '/app/*'], (req: Request, res: Response) => {
+    const file = req.path.substring(4) || 'index.html';
 
-    const finalPath = path.join(dist) + '/';
-    // console.log({ dist, file, finalPath });
+    const finalPath = path.join(dist, file);
+    console.log({ dist, file, finalPath });
     res.sendFile(finalPath);
   });
 }
