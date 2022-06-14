@@ -1,0 +1,93 @@
+:host {
+  display: grid;
+  padding: 1rem;
+  gap: 1rem;
+  background: #101010;
+  grid-template-columns: min-content 1fr min-content;
+  grid-template-rows: min-content minmax(0, 1fr);
+
+  grid-template-areas:
+    "time    temp    date"
+    "typing  typing  typing"
+    "weather weather weather";
+}
+
+.tile {
+  display: grid;
+  align-content: center;
+  justify-content: center;
+
+  box-shadow: 0 0 0.25rem #000;
+  background: #333;
+  color: #eee;
+  padding: 1rem;
+  border: none;
+
+  &__time {
+    grid-area: time;
+    font-size: 5em;
+    line-height: 1em;
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  &__temp {
+    grid-area: temp;
+    font-size: 5em;
+    line-height: 1em;
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  &__date {
+    grid-area: date;
+    font-size: 2em;
+    display: grid;
+    grid-template-areas:
+      "dow   date"
+      "month date"
+      "year  year";
+    line-height: 1em;
+    align-items: center;
+    gap: 0 0.5ch;
+
+    & > * {
+      line-height: 1em;
+    }
+
+    &__dow {
+      grid-area: dow;
+    }
+    &__date {
+      grid-area: date;
+      font-size: 3em;
+      font-family: "JetBrains Mono", monospace;
+    }
+    &__month {
+      grid-area: month;
+      opacity: 0.5;
+    }
+    &__year {
+      padding-top: 0.5em;
+      grid-area: year;
+      opacity: 0.25;
+      text-align: center;
+      font-size: 0.5em;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  &__typing {
+    grid-area: typing;
+    text-align: center;
+    font-size: 10rem;
+    box-sizing: border-box;
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  &__weather {
+    grid-area: weather;
+    display: flex;
+    justify-content: space-around;
+    gap: 1em;
+  }
+}

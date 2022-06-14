@@ -154,7 +154,7 @@ export class Wordle {
     await this.page.keyboard.press('Enter');
     await this.page.waitForTimeout(2000);
 
-    const allStatus = await this.getFullSstatus();
+    const allStatus = await this.getFullStatus();
     const latest = allStatus[this.wordAttemptCount++];
     this._states.push(latest);
     return latest;
@@ -412,7 +412,7 @@ export class Wordle {
     this.page.close();
   }
 
-  private async getFullSstatus() {
+  private async getFullStatus() {
     const ret: WordleLetterState[][] = [];
 
     const rows = await this.page.$$(`shadow/#board div.row`);

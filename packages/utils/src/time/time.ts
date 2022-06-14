@@ -10,7 +10,8 @@ export const second$ = secondSubject.asObservable();
 async function updateSecond() {
   const timeUntilNextSecond = 1000 - (new Date().getTime() % 1000);
   await new Promise(resolve => setTimeout(resolve, timeUntilNextSecond));
-  secondSubject.next(nearestSecondDate());
+  const time = nearestSecondDate();
+  secondSubject.next(time);
   setTimeout(() => updateSecond(), 0);
 }
 updateSecond();

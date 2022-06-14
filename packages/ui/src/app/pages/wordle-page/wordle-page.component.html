@@ -1,27 +1,46 @@
 <h1 class="title">Wordle</h1>
 
-<div class="controls">
-  <input class="input" [(ngModel)]="bestGuess" />
-  <button class="button" (click)="playWordle()">Play</button>
-</div>
-
-<!-- <ol>
-  <li *ngFor="let event of events">{{ event | json }}</li>
-</ol> -->
-
-<section class="wordle-game">
-  <div *ngFor="let word of guesses" class="wordle-game__row">
-    <span
-      *ngFor="let letter of word"
-      class="wordle-game__row__letter"
-      [class.wordle-game__row__letter--absent]="letter.state === 'absent'"
-      [class.wordle-game__row__letter--present]="letter.state === 'present'"
-      [class.wordle-game__row__letter--correct]="letter.state === 'correct'"
-      >{{ letter.character }}</span
-    >
-  </div>
+<section *ngIf="!hasStarted" class="start-controls">
+  <form class="controls" (submit)="playWordle()">
+    <h2 class="input-label">starting word</h2>
+    <input
+      class="input"
+      [disabled]="isPlaying"
+      [value]="bestGuess$ | async"
+      (focus)="clearInput()"
+      (blur)="checkForEmpty()"
+      (keyup)="setGuess($event)"
+      name="word"
+    />
+    <button type="submit" class="button" [disabled]="isPlaying">Play</button>
+  </form>
 </section>
 
-<textarea *ngIf="blocks" class="brag" [value]="blocks"></textarea>
+<section *ngIf="hasStarted">
+  <section class="wordle-game">
+    <div *ngFor="let word of guesses" class="wordle-game__row">
+      <span
+        *ngFor="let letter of word"
+        class="wordle-game__row__letter"
+        [class.wordle-game__row__letter--absent]="letter.state === 'absent'"
+        [class.wordle-game__row__letter--present]="letter.state === 'present'"
+        [class.wordle-game__row__letter--correct]="letter.state === 'correct'"
+        >{{ letter.character }}</span
+      >
+    </div>
+  </section>
 
-<!-- <pre><code>{{ guesses | json }}</code></pre> -->
+  <div *ngIf="isPlaying" class="is-playing">...playing...</div>
+
+  <!-- <textarea *ngIf="blocks" class="brag" [value]="blocks"></textarea> -->
+  <pre *ngIf="blocks" class="brag">{{ blocks }}</pre>
+
+  <div class="after-game-controls">
+    <button class="button" *ngIf="blocks" (click)="copyBragText()">
+      {{ copyText }}
+    </button>
+    <button class="button button--secondary" *ngIf="blocks" (click)="reset()">
+      Reset
+    </button>
+  </div>
+</section>

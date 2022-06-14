@@ -1,3 +1,4 @@
+export * from './between/between';
 export * from './bezier/bezier';
 export * from './chop/chop';
 export * from './clamp/clamp';
@@ -19,6 +20,7 @@ export * from './round/round';
 export * from './shortened-number/shortened-number';
 export * from './sort-by/sort-by';
 export * from './sum/sum';
+export * from './time/time';
 export * from './union/union';
 export * from './unique/unique';
 export * from './value-counts/value-counts';

@@ -8,6 +8,7 @@ import { initFan } from './fan';
 import { initLibrary } from './library';
 import { initUi } from './ui';
 import { initWordle } from './wordle/init-wordle';
+import { initDbHealth } from './mongo/db';
 
 const app = express();
 app.use(cors());
@@ -20,6 +21,7 @@ const io = new Server(server, {
   },
 });
 
+initDbHealth(app);
 initFan(app, io);
 initLibrary(app);
 initWordle(app, io);

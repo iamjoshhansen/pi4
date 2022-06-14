@@ -7,14 +7,10 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss",
-          "skipTests": true
+          "style": "scss"
         },
         "@schematics/angular:application": {
           "strict": true
-        },
-        "@schematics/angular:service": {
-          "skipTests": true
         }
       },
       "root": "",
@@ -24,6 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "baseHref": "/app/",
             "outputPath": "dist/ui",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -110,6 +107,5 @@
         }
       }
     }
-  },
-  "defaultProject": "ui"
+  }
 }
