@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import puppeteer, { Page } from 'puppeteer';
+import puppeteer, { Browser, Page } from 'puppeteer';
 import { bgGreen, bgBlack, bgCyan, inverse, red, green } from 'colors';
 import { answers, normalizedCharacterCounts } from './answers';
 import { compareDocumentPosition } from 'domutils';
@@ -88,7 +88,7 @@ async function wordleGame(): Promise<Wordle> {
   await closeHandle.click();
   await page.waitForTimeout(1000);
 
-  return new Wordle(page);
+  return new Wordle(browser, page);
 }
 
 function underline(word: string, start: number, length = 1) {
@@ -116,7 +116,7 @@ export class Wordle {
     return this._states;
   }
 
-  constructor(private readonly page: Page) {
+  constructor(private readonly browser: Browser, private readonly page: Page) {
     this.screenshooter = new ScreenShooter(page);
   }
 
@@ -410,6 +410,7 @@ export class Wordle {
 
   async close() {
     this.page.close();
+    this.browser.close();
   }
 
   private async getFullStatus() {

@@ -19,6 +19,10 @@ export type WordleGameEvent =
       event: 'start';
     }
   | {
+      event: 'error';
+      message: string;
+    }
+  | {
       event: 'guess';
       word: string;
     }
