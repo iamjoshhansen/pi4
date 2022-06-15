@@ -409,9 +409,13 @@ export class Wordle {
   }
 
   async close() {
-    this.page.close();
     try {
-      this.browser.close();
+      await this.page.close();
+    } catch {
+      console.warn(`Cannot close page.`);
+    }
+    try {
+      await this.browser.close();
     } catch {
       console.warn(`Cannot close browser.`);
     }
