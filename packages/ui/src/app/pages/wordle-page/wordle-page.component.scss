@@ -92,12 +92,12 @@
     gap: $gap;
 
     &__letter {
-      $size: 1.5em;
+      $size: 1.25em;
 
       width: $size;
       height: $size;
       line-height: $size;
-      border: solid 0.1em var(--letter-border);
+      border: solid 2px var(--letter-border);
       text-align: center;
       font-family: "JetBrains Mono", mono;
       display: block;
@@ -131,13 +131,14 @@
   box-sizing: border-box;
   border-left: solid 3px #00000077;
   padding: 0 1ch;
-  font-size: 2.5em;
+  font-size: 2em;
 }
 
 .after-game-controls {
   display: flex;
   flex-direction: row-reverse;
   gap: 1rem;
+  font-size: 1.5em;
 
   & > * {
     flex: 1;
