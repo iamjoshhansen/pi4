@@ -410,7 +410,11 @@ export class Wordle {
 
   async close() {
     this.page.close();
-    this.browser.close();
+    try {
+      this.browser.close();
+    } catch {
+      console.warn(`Cannot close browser.`);
+    }
   }
 
   private async getFullStatus() {
