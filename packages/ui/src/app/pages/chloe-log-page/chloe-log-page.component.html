@@ -1,0 +1,45 @@
+<h1 class="title">Chloe</h1>
+
+<table class="log-table">
+  <!-- <thead>
+    <tr>
+      <th>type</th>
+    </tr>
+  </thead> -->
+  <tbody>
+    <ng-container *ngFor="let metric of metrics">
+      <tr *ngIf="metric.type === MetricType.boob">
+        <td class="cell cell--time">{{ metric.time | date: "h:mm" }}</td>
+        <td>{{ metric.side }}</td>
+        <td>{{ metric.duration }}min</td>
+      </tr>
+
+      <tr *ngIf="metric.type === MetricType.diaper">
+        <td class="cell cell--time">{{ metric.time | date: "h:mm" }}</td>
+        <td>Poo: {{ metric.poop }}</td>
+        <td>Pee: {{ metric.pee }}</td>
+      </tr>
+
+      <tr *ngIf="metric.type === MetricType.weight">
+        <td class="cell cell--time">{{ metric.time | date: "h:mm" }}</td>
+        <td colspan="2">{{ metric.lb }}lb {{ metric.oz }}oz</td>
+      </tr>
+
+      <tr *ngIf="metric.type === MetricType.bottle">
+        <td class="cell cell--time">{{ metric.time | date: "h:mm" }}</td>
+        <td colspan="2">{{ metric.oz }}oz</td>
+      </tr>
+
+      <tr *ngIf="metric.type === MetricType.note">
+        <td class="cell cell--time">{{ metric.time | date: "h:mm" }}</td>
+        <td class="cell cell--type">Note</td>
+        <td>{{ metric.note }}</td>
+      </tr>
+
+      <tr *ngIf="metric.type === MetricType.temp">
+        <td class="cell cell--time">{{ metric.time | date: "h:mm" }}</td>
+        <td colspan="2">Temp: {{ metric.temp }}°</td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>

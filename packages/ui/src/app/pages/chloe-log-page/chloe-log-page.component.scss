@@ -1,0 +1,40 @@
+:host {
+  display: block;
+  padding: 1rem;
+}
+
+.title {
+  margin: 0 0 1rem;
+}
+
+.log-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  // th,
+  td {
+    padding: 0.5ch 1ch;
+    text-align: left;
+    font-weight: normal;
+    vertical-align: baseline;
+    white-space: nowrap;
+  }
+
+  // th {
+  //   border-bottom: solid 1px #00000099;
+  // }
+
+  .cell {
+    &--time {
+      width: 5ch;
+    }
+
+    &--type {
+      width: 3ch;
+    }
+
+    &--note {
+      white-space: unset;
+    }
+  }
+}
