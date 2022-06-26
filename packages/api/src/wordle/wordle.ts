@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import puppeteer, { Browser, Page } from 'puppeteer';
+import puppeteer, { Browser, ElementHandle, Page } from 'puppeteer';
 import { bgGreen, bgBlack, bgCyan, inverse, red, green } from 'colors';
 import { answers, normalizedCharacterCounts } from './answers';
 import { compareDocumentPosition } from 'domutils';
@@ -10,6 +10,12 @@ const { QueryHandler } = require('query-selector-shadow-dom/plugins/puppeteer');
 export type Guess = string & { __brand: 'Guess' };
 export type Boxes = string & { __brand: 'Boxes' };
 export type WordleLog = string & { __brand: 'WordleLog' };
+
+function chunk<T>(arr: T[], size: number): T[][] {
+  return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+    arr.slice(i * size, i * size + size),
+  );
+}
 
 const theLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const letterCounts: Record<string, number> = {};
@@ -71,23 +77,33 @@ async function wordleGame(): Promise<Wordle> {
     needsShadowHandler = false;
   }
 
+  console.log(`Lauanching puppeteer`);
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
   });
+  console.log(`Getting new page`);
   const page = await browser.newPage();
+
+  console.log(`Nav to wordle`);
   await page.goto('https://www.nytimes.com/games/wordle/index.html', {
     waitUntil: 'domcontentloaded',
   });
+  console.log(`Waiting 1s`);
   await page.waitForTimeout(1000);
 
-  const closeHandle = await page.waitForSelector('shadow/.close-icon');
+  const closeSelector = '[data-testid=icon-close]';
+  console.log(`Waiting for .close-icon`);
+  const closeHandle = await page.waitForSelector(`shadow/${closeSelector}`);
   if (!closeHandle) {
     throw new Error(`Cannot find close handle'`);
   }
 
+  console.log(`Clicking on close icon`);
   await closeHandle.click();
+  console.log(`Waiting 1s`);
   await page.waitForTimeout(1000);
 
+  console.log(`Wordle page is ready`);
   return new Wordle(browser, page);
 }
 
@@ -424,11 +440,28 @@ export class Wordle {
   private async getFullStatus() {
     const ret: WordleLetterState[][] = [];
 
-    const rows = await this.page.$$(`shadow/#board div.row`);
-    for (const row of rows) {
+    const cellSelector = '[data-testid=tile]';
+    const allCells = await this.page.$$(`shadow/${cellSelector}`);
+
+    const rows = chunk(allCells, 5);
+
+    // const rows = await (async () => {
+    //   const rows = new Set<ElementHandle<Element>>();
+    //   const cells = await this.page.$$(`shadow/${cellSelector}`);
+    //   for (const cell of cells.filter((c, i) => i % 5 === 0)) {
+    //     const parent = (await cell.$x('..')).at(0);
+    //     if (parent) {
+    //       rows.add(parent);
+    //     }
+    //   }
+    //   return [...rows];
+    // })();
+    console.log(`Row count: ${rows.length}`);
+    for (const tiles of rows) {
       const r: WordleLetterState[] = [];
 
-      const tiles = await row.$$('shadow/div.tile');
+      // const tiles = await row.$$(`shadow/${cellSelector}`);
+      // console.log(`- tile count: `, tiles.length);
       for (const tile of tiles) {
         if (tile === null) {
           continue;
@@ -481,6 +514,8 @@ export async function playWordle(
   for (let i = 0; i < allowedGuessCount; i++) {
     const word = words[i];
 
+    console.log(`Guessing:`, word);
+
     events?.next({
       event: 'guess',
       word,
@@ -488,6 +523,7 @@ export async function playWordle(
 
     const status = await wordle.guess(word);
 
+    console.log(`Status: `, status);
     events?.next({
       event: 'status',
       status,

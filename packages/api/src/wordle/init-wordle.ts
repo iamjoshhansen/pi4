@@ -34,6 +34,7 @@ export function initWordle(app: Express, io: Server) {
             event: 'error',
             message: er.message,
           };
+          console.log(`CAUGHT ERROR`, er);
           io.emit(SocketIoEvent.wordleGameEvent, emission);
         }
         sub.unsubscribe();
