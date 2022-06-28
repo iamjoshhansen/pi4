@@ -80,6 +80,11 @@ async function wordleGame(): Promise<Wordle> {
   console.log(`Lauanching puppeteer`);
   const browser = await puppeteer.launch({
     headless: false,
+    args: [`--window-size=768,1024`],
+    defaultViewport: {
+      width: 768,
+      height: 1024,
+    },
   });
   console.log(`Getting new page`);
   const page = await browser.newPage();
@@ -168,7 +173,7 @@ export class Wordle {
 
     // await this.screenshooter.snap(`type: ${word}`);
     await this.page.keyboard.press('Enter');
-    await this.page.waitForTimeout(2000);
+    await this.page.waitForTimeout(2500);
 
     const allStatus = await this.getFullStatus();
     const latest = allStatus[this.wordAttemptCount++];
