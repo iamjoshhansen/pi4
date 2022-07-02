@@ -23,11 +23,12 @@ for (const letter of theLetters) {
   letterCounts[letter] = 5;
 }
 
-const stateColor = {
+const stateColor: Record<WordleLetterState, any> = {
   [WordleLetterState.absent]: bgBlack,
   [WordleLetterState.present]: bgCyan,
   [WordleLetterState.correct]: bgGreen,
   [WordleLetterState.empty]: (x: string) => x,
+  [WordleLetterState.tbd]: (x: string) => x,
 };
 
 class Stepper {
@@ -156,29 +157,72 @@ export class Wordle {
           [WordleLetterState.empty]: '🟥',
           [WordleLetterState.present]: WordleBox.present,
           [WordleLetterState.correct]: WordleBox.correct,
+          [WordleLetterState.tbd]: '⏳',
         }[state];
       })
       .join('') as Boxes;
   }
 
   async guess(word: Guess) {
+    console.log(`======================== Guess: ${word}`);
+
     if (this.wordAttemptCount > 5) {
       throw new Error(`Out of guesses`);
     }
 
     this._words.push(word.toUpperCase() as Guess);
 
+    // const board = await this.page.$('shadow/#wordle-app-game');
+    // console.log(`has focus: ${!!board}`);
+    // await board?.focus();
+
+    await this.page.waitForTimeout(250);
     await this.page.keyboard.type(word);
+    console.log(`(typing "${word}")`);
     await this.page.waitForTimeout(250);
 
     // await this.screenshooter.snap(`type: ${word}`);
     await this.page.keyboard.press('Enter');
-    await this.page.waitForTimeout(2500);
+    console.log(`(enter)`);
 
-    const allStatus = await this.getFullStatus();
-    const latest = allStatus[this.wordAttemptCount++];
+    // wait for letters to have flipped over
+    console.log(`waiting for letters to have flipped over...`);
+    await this.flipHasCompleted();
+    console.log(`...letters have flipped over`);
+    // await this.page.waitForTimeout(2500);
+
+    const latest = await this.getLatestStatus();
+
+    console.log(`Flip complete: `, latest);
+
+    this.wordAttemptCount++;
+
     this._states.push(latest);
     return latest;
+  }
+
+  async flipHasCompleted() {
+    while (
+      (await this.hasLetterState(WordleLetterState.tbd)) ||
+      (await this.hasLetterState(WordleLetterState.empty))
+    ) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+  }
+
+  async hasLetterState(state: WordleLetterState): Promise<boolean> {
+    const latest = await this.getLatestStatus();
+    // console.log(`----- TBD: `, latest);
+    if (!latest) {
+      return false;
+    }
+    return latest.some(x => x === state);
+  }
+
+  async getLatestStatus() {
+    const allStatus = await this.getFullStatus();
+    // console.log(`wordAttemptCount: ${this.wordAttemptCount}`);
+    return allStatus[this.wordAttemptCount];
   }
 
   nextGuess(): Guess {
@@ -450,23 +494,10 @@ export class Wordle {
 
     const rows = chunk(allCells, 5);
 
-    // const rows = await (async () => {
-    //   const rows = new Set<ElementHandle<Element>>();
-    //   const cells = await this.page.$$(`shadow/${cellSelector}`);
-    //   for (const cell of cells.filter((c, i) => i % 5 === 0)) {
-    //     const parent = (await cell.$x('..')).at(0);
-    //     if (parent) {
-    //       rows.add(parent);
-    //     }
-    //   }
-    //   return [...rows];
-    // })();
-    console.log(`Row count: ${rows.length}`);
+    // console.log(`Row count: ${rows.length}`);
     for (const tiles of rows) {
       const r: WordleLetterState[] = [];
 
-      // const tiles = await row.$$(`shadow/${cellSelector}`);
-      // console.log(`- tile count: `, tiles.length);
       for (const tile of tiles) {
         if (tile === null) {
           continue;
@@ -519,7 +550,7 @@ export async function playWordle(
   for (let i = 0; i < allowedGuessCount; i++) {
     const word = words[i];
 
-    console.log(`Guessing:`, word);
+    // console.log(`Guessing:`, word);
 
     events?.next({
       event: 'guess',
@@ -540,7 +571,7 @@ export async function playWordle(
     solved = status.every(x => x === WordleLetterState.correct);
 
     if (solved) {
-      // console.log(`🎉 Solved!!!`);
+      console.log(`🎉 Solved!!!`);
       break;
     }
 

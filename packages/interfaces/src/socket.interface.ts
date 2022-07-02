@@ -12,6 +12,7 @@ export enum WordleLetterState {
   present = 'present',
   empty = 'empty',
   correct = 'correct',
+  tbd = 'tbd',
 }
 
 export type WordleGameEvent =
