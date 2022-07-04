@@ -82,12 +82,12 @@ async function wordleGame(log: (message: string) => void): Promise<Wordle> {
   console.log(`Lauanching puppeteer`);
   log(`Lauanching puppeteer`);
   const browser = await puppeteer.launch({
-    headless: false,
-    args: [`--window-size=768,1024`],
-    defaultViewport: {
-      width: 768,
-      height: 1024,
-    },
+    headless: true,
+    // args: [`--window-size=768,1024`],
+    // defaultViewport: {
+    //   width: 768,
+    //   height: 1024,
+    // },
   });
   log(`Getting new page`);
   console.log(`Getting new page`);
