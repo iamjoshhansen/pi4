@@ -72,13 +72,15 @@ class ScreenShooter {
 
 let needsShadowHandler = true;
 
-async function wordleGame(): Promise<Wordle> {
+async function wordleGame(log: (message: string) => void): Promise<Wordle> {
   if (needsShadowHandler) {
+    log(`Registering shadow dom`);
     await puppeteer.registerCustomQueryHandler('shadow', QueryHandler);
     needsShadowHandler = false;
   }
 
   console.log(`Lauanching puppeteer`);
+  log(`Lauanching puppeteer`);
   const browser = await puppeteer.launch({
     headless: false,
     args: [`--window-size=768,1024`],
@@ -87,16 +89,20 @@ async function wordleGame(): Promise<Wordle> {
       height: 1024,
     },
   });
+  log(`Getting new page`);
   console.log(`Getting new page`);
   const page = await browser.newPage();
 
+  log(`Navigating to wordle`);
   console.log(`Nav to wordle`);
   await page.goto('https://www.nytimes.com/games/wordle/index.html', {
     waitUntil: 'domcontentloaded',
   });
+  log(`Waiting 1 sec`);
   console.log(`Waiting 1s`);
   await page.waitForTimeout(1000);
 
+  log(`Waiting for instructions closer`);
   const closeSelector = '[data-testid=icon-close]';
   console.log(`Waiting for .close-icon`);
   const closeHandle = await page.waitForSelector(`shadow/${closeSelector}`);
@@ -104,11 +110,13 @@ async function wordleGame(): Promise<Wordle> {
     throw new Error(`Cannot find close handle'`);
   }
 
+  log(`Clicking on instructions closer`);
   console.log(`Clicking on close icon`);
   await closeHandle.click();
   console.log(`Waiting 1s`);
   await page.waitForTimeout(1000);
 
+  log(`Wordle game is ready!`);
   console.log(`Wordle page is ready`);
   return new Wordle(browser, page);
 }
@@ -163,10 +171,13 @@ export class Wordle {
       .join('') as Boxes;
   }
 
-  async guess(word: Guess) {
+  async guess(word: Guess, log: (message: string) => void) {
     console.log(`======================== Guess: ${word}`);
 
+    log(`Guessing ${word}`);
+
     if (this.wordAttemptCount > 5) {
+      log(`Out of guesses`);
       throw new Error(`Out of guesses`);
     }
 
@@ -176,24 +187,30 @@ export class Wordle {
     // console.log(`has focus: ${!!board}`);
     // await board?.focus();
 
+    log(`wait`);
     await this.page.waitForTimeout(250);
+    log(`typing`);
     await this.page.keyboard.type(word);
     console.log(`(typing "${word}")`);
     await this.page.waitForTimeout(250);
 
     // await this.screenshooter.snap(`type: ${word}`);
+    log(`entering`);
     await this.page.keyboard.press('Enter');
     console.log(`(enter)`);
 
     // wait for letters to have flipped over
+    log(`waiting for letters to flip over...`);
     console.log(`waiting for letters to have flipped over...`);
     await this.flipHasCompleted();
+    log(`letters have flipped`);
     console.log(`...letters have flipped over`);
     // await this.page.waitForTimeout(2500);
 
     const latest = await this.getLatestStatus();
+    log(`status: ${Wordle.boxWord(latest)}`);
 
-    console.log(`Flip complete: `, latest);
+    // console.log(`Flip complete: `, latest);
 
     this.wordAttemptCount++;
 
@@ -540,7 +557,16 @@ export async function playWordle(
     event: 'start',
   });
 
-  const wordle = await wordleGame();
+  function log(message: string) {
+    events?.next({
+      event: 'log',
+      message,
+    });
+  }
+
+  log(`Launching game`);
+
+  const wordle = await wordleGame(log);
 
   const words: Guess[] = [startingWord];
   const blocks: Boxes[] = [];
@@ -557,7 +583,7 @@ export async function playWordle(
       word,
     });
 
-    const status = await wordle.guess(word);
+    const status = await wordle.guess(word, log);
 
     console.log(`Status: `, status);
     events?.next({
@@ -571,6 +597,7 @@ export async function playWordle(
     solved = status.every(x => x === WordleLetterState.correct);
 
     if (solved) {
+      log(`Solved!`);
       console.log(`🎉 Solved!!!`);
       break;
     }
@@ -580,11 +607,14 @@ export async function playWordle(
     // console.log(`   ...finding possible answers`);
 
     if (i < allowedGuessCount - 1) {
+      log(`Picking next guess...`);
       const nextWord = wordle.nextGuess();
       // console.log(`   ...picked next word to guess:`, nextWord);
       words.push(nextWord);
     }
   }
+
+  log(`Done`);
 
   // console.log(`-------------`);
   // console.log();

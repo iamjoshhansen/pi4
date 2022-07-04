@@ -20,6 +20,9 @@ export class WordlePageComponent implements OnInit, OnDestroy {
 
   private actualBestGuess = '';
 
+  log = '';
+  error = '';
+
   private readonly bestGuessSubject = new BehaviorSubject<string>('');
   public readonly bestGuess$ = this.bestGuessSubject.asObservable();
   get bestGuess() {
@@ -70,6 +73,8 @@ export class WordlePageComponent implements OnInit, OnDestroy {
             this.complete = false;
             this.guesses = [];
             this.blocks = '';
+            this.log = 'playing...';
+            this.error = '';
             break;
           case 'guess':
             this.guesses.push(
@@ -80,6 +85,14 @@ export class WordlePageComponent implements OnInit, OnDestroy {
             this.guesses[this.guesses.length - 1].forEach(
               (letter, i) => (letter.state = event.status[i])
             );
+            break;
+          case 'log':
+            this.log = event.message;
+            break;
+          case 'error':
+            this.error = event.message;
+            this.isPlaying = false;
+            this.complete = true;
             break;
           case 'finish':
             this.complete = true;

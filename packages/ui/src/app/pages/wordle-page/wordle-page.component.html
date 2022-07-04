@@ -30,7 +30,9 @@
     </div>
   </section>
 
-  <div *ngIf="isPlaying" class="is-playing">...playing...</div>
+  <div *ngIf="isPlaying" class="is-playing">{{ log }}</div>
+
+  <div *ngIf="error" class="error">{{ error }}</div>
 
   <!-- <textarea *ngIf="blocks" class="brag" [value]="blocks"></textarea> -->
   <pre *ngIf="blocks" class="brag">{{ blocks }}</pre>
@@ -39,7 +41,7 @@
     <button class="button" *ngIf="blocks" (click)="copyBragText()">
       {{ copyText }}
     </button>
-    <button class="button button--secondary" *ngIf="blocks" (click)="reset()">
+    <button class="button button--secondary" *ngIf="complete" (click)="reset()">
       Reset
     </button>
   </div>

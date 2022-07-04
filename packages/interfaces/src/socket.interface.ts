@@ -28,6 +28,10 @@ export type WordleGameEvent =
       word: string;
     }
   | {
+      event: 'log';
+      message: string;
+    }
+  | {
       event: 'status';
       status: WordleLetterState[];
     }

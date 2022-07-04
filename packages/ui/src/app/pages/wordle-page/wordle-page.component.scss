@@ -68,6 +68,16 @@
   text-align: center;
 }
 
+.error {
+  padding: 1em;
+  text-align: center;
+  background: #ff9;
+  color: #900;
+  border: solid 1px #900;
+  margin: 0 0 1rem;
+  font-family: "JetBrains Mono", mono;
+}
+
 .wordle-game {
   --text-invert: #eee;
   --letter-border: #c9ccd1;
