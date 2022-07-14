@@ -23,7 +23,7 @@ const io = new Server(server, {
 
 initDbHealth(app);
 initFan(app, io);
-initLibrary(app);
+// initLibrary(app);
 initWordle(app, io);
 
 initUi(app);
