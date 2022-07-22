@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { LibraryItemsApiResponse } from '@pi4/interfaces';
+import { LibraryItemsApiResponse, LibraryItemStatus } from '@pi4/interfaces';
 import {
   BehaviorSubject,
   catchError,
@@ -40,7 +40,14 @@ export class LibraryPageComponent implements OnInit, OnDestroy {
   ) as unknown as Observable<LibraryItemsApiResponse>;
 
   checkedOutItems$ = this.data$.pipe(
-    // map((items) => items.filter((item) => item.status === BookStatus.out))
+    map((data) => {
+      return {
+        ...data,
+        items: data.items.filter(
+          (item) => item.status === LibraryItemStatus.checkedOut
+        ),
+      };
+    }),
     map((data) => {
       const dates = [...new Set(data.items.map((item) => item.due))].sort();
       return dates.map((due) => ({
