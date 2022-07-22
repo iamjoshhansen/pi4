@@ -31,14 +31,20 @@ initDbHealth(app);
 
 if (initializeFan) {
   initFan(app, io);
+} else {
+  console.info(`Skipping Fan`);
 }
 
 if (initializeLibrary) {
   initLibrary(app);
+} else {
+  console.info(`Skipping Library`);
 }
 
 if (initializeWordle) {
   initWordle(app, io);
+} else {
+  console.info(`Skipping Wordle`);
 }
 
 initUi(app);

@@ -9,6 +9,7 @@ import { Guess, playWordle } from './wordle';
 let wordleId = 0;
 
 export function initWordle(app: Express, io: Server) {
+  console.info(`Initializing Wordle`);
   app.get(ApiEndpoint.WordleBestGuess, (_req: Request, res: Response) => {
     res.json({
       guess: bestStartingWordleGuess,
