@@ -5,9 +5,9 @@ import {
   LibraryItemSubtitle,
   LibraryItemTitle,
   LibraryItemVolume,
-  LibraryOwnerId,
 } from '@pi4/interfaces';
 import puppeteer, { Page } from 'puppeteer';
+import { ask } from './ask';
 
 class Stepper {
   private i = 0;
@@ -17,7 +17,7 @@ class Stepper {
   }
 }
 
-const getScreenshots = true;
+const getScreenshots = false;
 
 const logActive = false;
 
@@ -36,20 +36,39 @@ class ScreenShooter {
   constructor(private readonly page: Page, public enabled = true) {}
 
   async snap(label: string) {
-    await this.page.screenshot({
-      path: `shots/${this.prefix}--${this.step.next}--${label}.png`,
-    });
+    if (this.enabled) {
+      await this.page.screenshot({
+        path: `shots/${this.prefix}--${this.step.next}--${label}.png`,
+      });
+    }
   }
+}
+
+async function hold() {
+  const res = (await ask(`Continue? (Y/n)`)) || 'Y';
+  if (res.toUpperCase() === 'Y') {
+    return;
+  }
+  process.exit(0);
 }
 
 export async function getBooks(card: string, pin: string) {
   logStep(`Launching browser...`);
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--single-process',
+    ],
+  });
   const page = await browser.newPage();
   await page.goto('https://hpldsierraapp.mylibrary.us/iii/cas/login');
   logStep('  ...done');
 
   const screenshooter = new ScreenShooter(page);
+  screenshooter.enabled = getScreenshots;
   await screenshooter.snap('login');
 
   logStep(`Logging in...`);
@@ -76,12 +95,24 @@ export async function getBooks(card: string, pin: string) {
 
   logStep(`Going to checkout list`);
 
-  const hasLink = await page.evaluate(() => {
-    const listLink = document.querySelector('#patButChkouts a');
-    return !!listLink;
+  const hasCheckoutLink = await page.evaluate(() => {
+    const item = document.querySelector('#patButChkouts a');
+    return !!item;
   });
 
+  const hasHoldForm = await page.evaluate(() => {
+    const item = document.querySelector('#hold_form');
+    return !!item;
+  });
+
+  if (hasHoldForm) {
+    logStep(`Has hold form... exiting with nothing`);
+    await browser.close();
+    return [];
+  }
+
   async function getItemsOnPage() {
+    // await hold();
     return await page.evaluate(() => {
       const books: Omit<LibraryItemRow, 'ownerId'>[] = [];
       // const books: any[] = [];
@@ -143,7 +174,7 @@ export async function getBooks(card: string, pin: string) {
     });
   }
 
-  if (hasLink) {
+  if (hasCheckoutLink) {
     logStep(`Has checkout link...`);
     await page.click('#patButChkouts a');
     await page.waitForTimeout(1000);

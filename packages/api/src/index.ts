@@ -1,14 +1,20 @@
-import { ioPort, port } from '@pi4/env';
+import {
+  initializeFan,
+  initializeLibrary,
+  initializeWordle,
+  ioPort,
+  port,
+} from '@pi4/env';
 import cors from 'cors';
 import express from 'express';
-import { Server } from 'socket.io';
 import http from 'http';
+import { Server } from 'socket.io';
 
 import { initFan } from './fan';
 import { initLibrary } from './library';
+import { initDbHealth } from './mongo/db';
 import { initUi } from './ui';
 import { initWordle } from './wordle/init-wordle';
-import { initDbHealth } from './mongo/db';
 
 const app = express();
 app.use(cors());
@@ -22,9 +28,18 @@ const io = new Server(server, {
 });
 
 initDbHealth(app);
-initFan(app, io);
-// initLibrary(app);
-initWordle(app, io);
+
+if (initializeFan) {
+  initFan(app, io);
+}
+
+if (initializeLibrary) {
+  initLibrary(app);
+}
+
+if (initializeWordle) {
+  initWordle(app, io);
+}
 
 initUi(app);
 

@@ -58,6 +58,10 @@ export async function runLibraryItemDataload() {
       }
     }
 
+    if (activeItems.length === 0) {
+      console.log(`  (none)`);
+    }
+
     for (const [barcode, { title }] of returnedItemBarcodes) {
       await libraryItemCollection.findOneAndUpdate(
         { ownerId, barcode },

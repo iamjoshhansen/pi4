@@ -20,6 +20,9 @@ export const dev = asBoolean(process.env.dev)!;
 export const fanPin = asNumber(process.env.fanPin)!;
 export const minTemp = asNumber(process.env.minTemp)!;
 export const maxTemp = asNumber(process.env.maxTemp)!;
+export const initializeFan = asBoolean(process.env.initializeFan)!;
+export const initializeLibrary = asBoolean(process.env.initializeLibrary)!;
+export const initializeWordle = asBoolean(process.env.initializeWordle)!;
 
 const missing = new Set<string>();
 
@@ -34,7 +37,19 @@ function check(prop: Record<string, any>) {
   }
 }
 
-check({ port, ioPort, mongoUri, dbName, dev, fanPin, minTemp, maxTemp });
+check({
+  port,
+  ioPort,
+  mongoUri,
+  dbName,
+  dev,
+  fanPin,
+  minTemp,
+  maxTemp,
+  initializeFan,
+  initializeLibrary,
+  initializeWordle,
+});
 
 if (missing.size > 0) {
   throw new Error(
