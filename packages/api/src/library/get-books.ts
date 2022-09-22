@@ -7,7 +7,8 @@ import {
   LibraryItemVolume,
 } from '@pi4/interfaces';
 import puppeteer, { Page } from 'puppeteer';
-import { ask } from './ask';
+
+// import { ask } from '../ask';
 
 class Stepper {
   private i = 0;
@@ -44,13 +45,13 @@ class ScreenShooter {
   }
 }
 
-async function hold() {
-  const res = (await ask(`Continue? (Y/n)`)) || 'Y';
-  if (res.toUpperCase() === 'Y') {
-    return;
-  }
-  process.exit(0);
-}
+// async function hold() {
+//   const res = (await ask(`Continue? (Y/n)`)) || 'Y';
+//   if (res.toUpperCase() === 'Y') {
+//     return;
+//   }
+//   process.exit(0);
+// }
 
 export async function getBooks(card: string, pin: string) {
   logStep(`Launching browser...`);

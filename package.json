@@ -18,7 +18,8 @@
     "prettier:fix": "npm run prettier:fix --workspaces --if-present",
     "build:all": "npm run build --workspaces --if-present",
     "start": "npm i --ignore-scripts && npm run build:all && npm run start:prod",
-    "start:prod": "npm run start:prod --workspace @pi4/api"
+    "start:prod": "npm run start:prod --workspace @pi4/api",
+    "deploy": "bash -s ./bash/deploy.sh"
   },
   "author": "Joshua Hansen <iamjoshhansen@gmail.com>",
   "license": "UNLICENSED",

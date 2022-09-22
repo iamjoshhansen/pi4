@@ -5,6 +5,9 @@ export enum SocketIoEvent {
   // wordle
   requestWordleGame = 'request-wordle-game',
   wordleGameEvent = 'wordle-game-event',
+
+  // weather
+  updateCurrentWeather = 'update:weather:current',
 }
 
 export enum WordleLetterState {

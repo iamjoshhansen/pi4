@@ -3,7 +3,7 @@ import {
   LibraryItemRow,
   LibraryItemStatus,
 } from '@pi4/interfaces';
-import { getBooks } from '../get-books';
+import { getBooks } from './get-books';
 import { getLibraryCardCollection } from '../mongo/db';
 import { getLibraryItemCollection } from '../mongo/library-items';
 

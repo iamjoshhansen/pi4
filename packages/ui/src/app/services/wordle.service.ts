@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
-import {
-  SocketIoEvent,
-  WordleGameEvent,
-  ApiEndpointMap,
-  ApiEndpoint,
-  WordleBestGuessResponse,
-} from '@pi4/interfaces';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import {
+  ApiEndpoint,
+  ApiEndpointMap,
+  SocketIoEvent,
+  WordleBestGuessResponse,
+  WordleGameEvent,
+} from '@pi4/interfaces';
+import { Socket } from 'ngx-socket-io';
+import { Subject } from 'rxjs';
+
 import { apiPrefix } from './api-prefix';
-import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

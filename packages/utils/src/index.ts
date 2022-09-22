@@ -13,6 +13,7 @@ export * from './get-duplicates/get-duplicates';
 export * from './get-list-changes/get-list-changes';
 export * from './lerp/lerp';
 export * from './map-values/map-values';
+export * from './query-params/query-params';
 export * from './range/range';
 export * from './reassign/reassign';
 export * from './reverse/reverse';

@@ -8,21 +8,29 @@ function asBoolean(val: any) {
   return typeof val === 'undefined' ? undefined : val === 'true';
 }
 
-function asNumber(val: any) {
+function asInt(val: any) {
   return typeof val === 'undefined' ? undefined : parseInt(val, 10);
 }
 
-export const port = asNumber(process.env.port)!;
-export const ioPort = asNumber(process.env.ioPort)!;
+function asFloat(val: any) {
+  return typeof val === 'undefined' ? undefined : parseFloat(val);
+}
+
+export const port = asInt(process.env.port)!;
+export const ioPort = asInt(process.env.ioPort)!;
 export const mongoUri = process.env.mongoUri!;
 export const dbName = process.env.dbName!;
 export const dev = asBoolean(process.env.dev)!;
-export const fanPin = asNumber(process.env.fanPin)!;
-export const minTemp = asNumber(process.env.minTemp)!;
-export const maxTemp = asNumber(process.env.maxTemp)!;
+export const fanPin = asInt(process.env.fanPin)!;
+export const minTemp = asInt(process.env.minTemp)!;
+export const maxTemp = asInt(process.env.maxTemp)!;
 export const initializeFan = asBoolean(process.env.initializeFan)!;
 export const initializeLibrary = asBoolean(process.env.initializeLibrary)!;
 export const initializeWordle = asBoolean(process.env.initializeWordle)!;
+export const weatherApiUri = process.env.weatherApiUri!;
+export const weatherApiKey = process.env.weatherApiKey!;
+export const longitude = asFloat(process.env.longitude)!;
+export const latitude = asFloat(process.env.latitude)!;
 
 const missing = new Set<string>();
 
@@ -49,6 +57,10 @@ check({
   initializeFan,
   initializeLibrary,
   initializeWordle,
+  weatherApiUri,
+  weatherApiKey,
+  longitude,
+  latitude,
 });
 
 if (missing.size > 0) {

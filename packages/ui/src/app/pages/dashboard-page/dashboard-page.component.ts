@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { second$ } from '@pi4/utils';
-import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
+import { map } from 'rxjs';
+import { TimeService } from 'src/app/services/time.service';
+import { WeatherService } from 'src/app/services/weather.service';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -8,12 +9,18 @@ import { BehaviorSubject, distinctUntilChanged, map } from 'rxjs';
   styleUrls: ['./dashboard-page.component.scss'],
 })
 export class DashboardPageComponent implements OnInit {
-  private readonly timeSubject = new BehaviorSubject<number>(0);
-  public readonly time$ = this.timeSubject.pipe(distinctUntilChanged());
+  second$ = this.timeService.second$;
 
-  constructor() {}
+  currentTemp$ = this.weatherService.currentTemp$.pipe(
+    map((temp) => Math.round(temp))
+  );
+
+  constructor(
+    private weatherService: WeatherService,
+    private timeService: TimeService
+  ) {}
 
   ngOnInit(): void {
-    second$.subscribe((second) => this.timeSubject.next(second.getTime()));
+    //
   }
 }

@@ -1,6 +1,6 @@
 import { green, inverse } from 'colors';
 import { readFileSync, writeFileSync } from 'fs';
-import { getBooks } from './get-books';
+import { getBooks } from './library/get-books';
 // import * as groupBy from 'lodash.groupby';
 // const groupBy = require('lodash.groupby');
 import groupBy = require('lodash.groupby');

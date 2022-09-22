@@ -1,12 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  BehaviorSubject,
-  delay,
-  distinctUntilChanged,
-  map,
-  Subject,
-  takeUntil,
-} from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { WordleService } from 'src/app/services/wordle.service';
 import { copyToClipboard } from 'src/app/utils/copy-to-clipboard';
 

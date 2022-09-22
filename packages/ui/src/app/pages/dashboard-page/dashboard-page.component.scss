@@ -7,8 +7,8 @@
   grid-template-rows: min-content minmax(0, 1fr);
 
   grid-template-areas:
-    "time    temp    date"
-    "typing  typing  typing"
+    "time . date"
+    "temp temp temp"
     "weather weather weather";
 }
 
@@ -25,14 +25,14 @@
 
   &__time {
     grid-area: time;
-    font-size: 5em;
+    font-size: 7em;
     line-height: 1em;
     font-family: "JetBrains Mono", monospace;
   }
 
   &__temp {
     grid-area: temp;
-    font-size: 5em;
+    font-size: 40em;
     line-height: 1em;
     font-family: "JetBrains Mono", monospace;
   }

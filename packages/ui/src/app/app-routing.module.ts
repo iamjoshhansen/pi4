@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ChloeLogPageComponent } from './pages/chloe-log-page/chloe-log-page.component';
-import { ChloeLogPageModule } from './pages/chloe-log-page/chloe-log-page.module';
 
 import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
 import { DashboardPageModule } from './pages/dashboard-page/dashboard-page.module';
@@ -40,21 +38,15 @@ const routes: Routes = [
     title: 'Wordle Solver',
     component: WordlePageComponent,
   },
-  {
-    path: 'chloe',
-    title: 'Chloe',
-    component: ChloeLogPageComponent,
-  },
 ];
 
 @NgModule({
   imports: [
-    ChloeLogPageModule,
     DashboardPageModule,
     HomePageModule,
+    RouterModule.forRoot(routes),
     LibraryPageModule,
     Pi4Module,
-    RouterModule.forRoot(routes),
     WordlePageModule,
   ],
   exports: [RouterModule],

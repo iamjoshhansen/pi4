@@ -1,15 +1,15 @@
 <div class="tile tile__time">
-  <span>{{ time$ | async }}</span>
+  <span>{{ second$ | async | date: "hh:mm:ss" }}</span>
 </div>
 
 <div class="tile tile__temp">
-  <span>76°</span>
+  <span>{{ currentTemp$ | async }}°</span>
 </div>
 
 <div class="tile tile__date">
-  <div class="tile__date__dow">Tue</div>
-  <div class="tile__date__month">Jun</div>
-  <div class="tile__date__date">7</div>
+  <div class="tile__date__dow">Thu</div>
+  <div class="tile__date__month">Sep</div>
+  <div class="tile__date__date">22</div>
   <div class="tile__date__year">
     <span>2</span>
     <span>0</span>
@@ -18,7 +18,7 @@
   </div>
 </div>
 
-<input class="tile tile__typing" />
+<!-- <input class="tile tile__typing" /> -->
 
 <div class="tile tile__weather">
   <div>Tue</div>

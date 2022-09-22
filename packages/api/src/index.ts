@@ -4,6 +4,8 @@ import {
   initializeWordle,
   ioPort,
   port,
+  weatherApiKey,
+  weatherApiUri,
 } from '@pi4/env';
 import cors from 'cors';
 import express from 'express';
@@ -14,6 +16,7 @@ import { initFan } from './fan';
 import { initLibrary } from './library';
 import { initDbHealth } from './mongo/db';
 import { initUi } from './ui';
+import { WeatherApp } from './weather/weather.app';
 import { initWordle } from './wordle/init-wordle';
 
 const app = express();
@@ -46,6 +49,13 @@ if (initializeWordle) {
 } else {
   console.info(`Skipping Wordle`);
 }
+
+console.log(`Initializing Weather`);
+new WeatherApp({
+  io,
+  key: weatherApiKey,
+  api: weatherApiUri,
+}).init();
 
 initUi(app);
 
