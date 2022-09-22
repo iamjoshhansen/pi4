@@ -2,19 +2,28 @@
   <span>{{ second$ | async | date: "hh:mm:ss" }}</span>
 </div>
 
+<div class="tile tile__wake-lock">
+  {{ awake$ | async }}
+  <button (click)="allowSleep()" *ngIf="awake$ | async">Sleep</button>
+  <button (click)="stayAwake()" *ngIf="!(awake$ | async)">Wake</button>
+</div>
+
 <div class="tile tile__temp">
-  <span>{{ currentTemp$ | async }}°</span>
+  <div class="temp">
+    <span>{{ currentTemp$ | async }}</span>
+    <span class="deg">°</span>
+  </div>
 </div>
 
 <div class="tile tile__date">
-  <div class="tile__date__dow">Thu</div>
-  <div class="tile__date__month">Sep</div>
-  <div class="tile__date__date">22</div>
+  <div class="tile__date__dow">{{ date$ | async | date: "E" }}</div>
+  <div class="tile__date__month">{{ month$ | async | date: "MMM" }}</div>
+  <div class="tile__date__date">{{ date$ | async | date: "d" }}</div>
   <div class="tile__date__year">
-    <span>2</span>
-    <span>0</span>
-    <span>2</span>
-    <span>2</span>
+    <span>{{ (year$ | async | date: "Y")?.charAt(0) }}</span>
+    <span>{{ (year$ | async | date: "Y")?.charAt(1) }}</span>
+    <span>{{ (year$ | async | date: "Y")?.charAt(2) }}</span>
+    <span>{{ (year$ | async | date: "Y")?.charAt(3) }}</span>
   </div>
 </div>
 

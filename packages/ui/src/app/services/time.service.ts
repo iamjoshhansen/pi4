@@ -9,11 +9,18 @@ export class TimeService {
   public readonly second$: Observable<Date>;
   public readonly minute$: Observable<Date>;
   public readonly hour$: Observable<Date>;
+  public readonly date$: Observable<Date>;
+  public readonly month$: Observable<Date>;
+  public readonly year$: Observable<Date>;
 
   constructor() {
-    const { second$, minute$, hour$ } = getTimeObservables();
+    const { second$, minute$, hour$, date$, month$, year$ } =
+      getTimeObservables();
     this.second$ = second$;
     this.minute$ = minute$;
     this.hour$ = hour$;
+    this.date$ = date$;
+    this.month$ = month$;
+    this.year$ = year$;
   }
 }

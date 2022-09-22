@@ -40,6 +40,32 @@ export function getTimeObservables() {
     distinctUntilChanged((a, b) => a.getTime() === b.getTime()),
   );
 
+  const date$ = second$.pipe(
+    map(
+      date =>
+        new Date(
+          date.getFullYear(),
+          date.getMonth(),
+          date.getDate(),
+          0,
+          0,
+          0,
+          0,
+        ),
+    ),
+    distinctUntilChanged((a, b) => a.getTime() === b.getTime()),
+  );
+
+  const month$ = second$.pipe(
+    map(date => new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0)),
+    distinctUntilChanged((a, b) => a.getTime() === b.getTime()),
+  );
+
+  const year$ = second$.pipe(
+    map(date => new Date(date.getFullYear(), 1, 1, 0, 0, 0, 0)),
+    distinctUntilChanged((a, b) => a.getTime() === b.getTime()),
+  );
+
   async function updateSecond() {
     const timeUntilNextSecond = 1000 - (new Date().getTime() % 1000);
     await new Promise(resolve => setTimeout(resolve, timeUntilNextSecond));
@@ -53,5 +79,8 @@ export function getTimeObservables() {
     second$,
     minute$,
     hour$,
+    date$,
+    month$,
+    year$,
   };
 }

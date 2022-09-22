@@ -7,8 +7,8 @@
   grid-template-rows: min-content minmax(0, 1fr);
 
   grid-template-areas:
-    "time . date"
-    "temp temp temp"
+    "time wake-lock date"
+    "temp temp      temp"
     "weather weather weather";
 }
 
@@ -30,11 +30,14 @@
     font-family: "JetBrains Mono", monospace;
   }
 
+  &__wake-lock {
+    grid-area: wake-lock;
+  }
+
   &__temp {
     grid-area: temp;
     font-size: 40em;
     line-height: 1em;
-    font-family: "JetBrains Mono", monospace;
   }
 
   &__date {
@@ -89,5 +92,17 @@
     display: flex;
     justify-content: space-around;
     gap: 1em;
+  }
+}
+
+.temp {
+  display: flex;
+  align-items: flex-start;
+  font-family: "JetBrains Mono", monospace;
+
+  .deg {
+    opacity: 0.33;
+    font-size: 0.5em;
+    line-height: 1em;
   }
 }
