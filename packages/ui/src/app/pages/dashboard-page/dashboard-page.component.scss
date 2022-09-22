@@ -106,3 +106,20 @@
     line-height: 1em;
   }
 }
+
+.time {
+  display: flex;
+
+  .dark {
+    opacity: 0.25;
+  }
+
+  .ampm {
+    display: flex;
+    flex-direction: column;
+    line-height: 1em;
+    font-size: 0.46em;
+    text-transform: capitalize;
+    padding-left: 0.5em;
+  }
+}

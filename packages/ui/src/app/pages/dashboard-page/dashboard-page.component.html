@@ -1,5 +1,15 @@
 <div class="tile tile__time">
-  <span>{{ second$ | async | date: "hh:mm:ss" }}</span>
+  <span class="time">
+    <span class="dark" *ngIf="(second$ | async | date: 'hh')?.charAt(0) === '0'"
+      >0</span
+    >
+    <span>{{ second$ | async | date: "h:mm" }}</span>
+    <span class="dark">{{ second$ | async | date: ":ss" }}</span>
+    <span class="ampm">
+      <span>{{ (ampm$ | async)?.charAt(0) }}</span>
+      <span>m</span>
+    </span>
+  </span>
 </div>
 
 <div class="tile tile__wake-lock">

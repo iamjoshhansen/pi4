@@ -40,6 +40,8 @@ export function getTimeObservables() {
     distinctUntilChanged((a, b) => a.getTime() === b.getTime()),
   );
 
+  const ampm$ = hour$.pipe(map(date => (date.getHours() < 12 ? 'am' : 'pm')));
+
   const date$ = second$.pipe(
     map(
       date =>
@@ -82,5 +84,6 @@ export function getTimeObservables() {
     date$,
     month$,
     year$,
+    ampm$,
   };
 }
