@@ -43,13 +43,13 @@ export class FanCPU {
       if (temp > this.maxTemp && !this.active) {
         this.active = true;
         for (const cb of this.callbacks) {
-          cb(this.active);
+          cb(this.isActive);
         }
         console.log(`turning fan on`);
       } else if (temp < this.minTemp && this.active) {
         this.active = false;
         for (const cb of this.callbacks) {
-          cb(this.active);
+          cb(this.isActive);
         }
         console.log(`turning fan off`);
       }
