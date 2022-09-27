@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { map, of } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, map, of } from 'rxjs';
+import { CpuTempService } from 'src/app/services/cpu-temp.service';
+import { SpeakService } from 'src/app/services/speak.service';
 import { TimeService } from 'src/app/services/time.service';
 import { WakeLockService } from 'src/app/services/wake-lock.service';
 import { WeatherService } from 'src/app/services/weather.service';
@@ -20,16 +22,22 @@ export class DashboardPageComponent implements OnInit {
     map((temp) => Math.round(temp))
   );
 
+  spokenText = 'Hello';
+
   static id = 0;
 
   private id: number;
 
   awake$ = this.wakeLockService.active$;
 
+  cpuTemp$ = this.cpuTempService.cpuTemp$;
+
   constructor(
     private weatherService: WeatherService,
     private timeService: TimeService,
-    private wakeLockService: WakeLockService
+    private wakeLockService: WakeLockService,
+    private cpuTempService: CpuTempService,
+    private speakService: SpeakService
   ) {
     this.id = DashboardPageComponent.id++;
   }
@@ -48,5 +56,14 @@ export class DashboardPageComponent implements OnInit {
 
   allowSleep() {
     this.wakeLockService.removeReason(`dashboard-${this.id}`);
+  }
+
+  async speak() {
+    try {
+      await this.speakService.say(this.spokenText);
+      console.log(`Done speaking`);
+    } catch (er) {
+      console.warn(`Failed to speak:`, er);
+    }
   }
 }

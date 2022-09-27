@@ -10,11 +10,12 @@ import {
 import cors from 'cors';
 import express from 'express';
 import http from 'http';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
 import { initFan } from './fan';
 import { initLibrary } from './library';
 import { initDbHealth } from './mongo/db';
+import { speak } from './speak';
 import { initUi } from './ui';
 import { WeatherApp } from './weather/weather.app';
 import { initWordle } from './wordle/init-wordle';
@@ -58,6 +59,23 @@ new WeatherApp({
 }).init();
 
 initUi(app);
+
+io.on('connection', (socket: Socket) => {
+  socket.on('speak', async (message: string, cb?: (error?: string) => void) => {
+    if (!message) {
+      console.warn(`Spoken message was empty`);
+      if (cb) {
+        cb(`Spoken message was empty`);
+      }
+      return;
+    }
+    console.log(`Speaking:`, message);
+    await speak(message);
+    if (cb) {
+      cb();
+    }
+  });
+});
 
 server.listen(ioPort);
 console.log(`IO listening on ws://localhost:${ioPort}/`);

@@ -7,9 +7,9 @@
   grid-template-rows: min-content minmax(0, 1fr);
 
   grid-template-areas:
-    "time wake-lock date"
-    "temp temp      temp"
-    "weather weather weather";
+    "time    speak   date"
+    "temp    temp    temp"
+    "weather weather cpu-temp";
 }
 
 .tile {
@@ -32,6 +32,15 @@
 
   &__wake-lock {
     grid-area: wake-lock;
+  }
+
+  &__cpu-temp {
+    grid-area: cpu-temp;
+  }
+
+  &__speak {
+    grid-area: speak;
+    justify-content: normal;
   }
 
   &__temp {
@@ -121,5 +130,32 @@
     font-size: 0.46em;
     text-transform: capitalize;
     padding-left: 0.5em;
+  }
+}
+
+.speak {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+
+  &__input {
+    box-sizing: border-box;
+    height: 2em;
+    background: none;
+    border: solid 1px #eee;
+    border-width: 0 0 1px;
+    border-radius: 0;
+    padding: 0.25em 1em 0.25em 0;
+    color: #eee;
+  }
+
+  &__button {
+    cursor: pointer;
+    box-sizing: border-box;
+    height: 2em;
+    background: none;
+    border: solid 1px #eee;
+    border-radius: 0;
+    padding: 0.25em 1em;
+    color: #eee;
   }
 }
