@@ -64,7 +64,7 @@ export class FanCPU {
   }
 
   get isActive() {
-    return this.active;
+    return !this.active;
   }
 
   get temp(): number {
