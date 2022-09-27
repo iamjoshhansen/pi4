@@ -19,7 +19,7 @@
 </div> -->
 
 <div class="tile tile__cpu-temp">
-  <div class="temp">
+  <div class="temp" [class.temp--active]="isFanActive$ | async">
     <span>{{ (cpuTemp$ | async) ?? "?" }}</span>
     <span class="deg">°</span>
   </div>

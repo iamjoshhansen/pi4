@@ -20,12 +20,24 @@ export class CpuTempService {
     distinctUntilChanged()
   ) as unknown as Observable<number>;
 
+  private readonly isFanActiveSubject = new BehaviorSubject<
+    boolean | undefined
+  >(undefined);
+  public readonly isFanActive$ = this.isFanActiveSubject.pipe(
+    distinctUntilChanged()
+  );
+
   constructor(private socket: Socket) {
     this.socket.on(SocketIoEvent.cpuTempChange, (data: number) => {
       // console.log({ data });
       this.cpuTempSubject.next(data);
     });
 
+    this.socket.on('fan:update', (active: boolean) =>
+      this.isFanActiveSubject.next(active)
+    );
+
+    this.socket.emit('request-fan-status');
     this.socket.emit(SocketIoEvent.requestCpuTemp);
   }
 }

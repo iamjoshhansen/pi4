@@ -31,6 +31,7 @@ export class DashboardPageComponent implements OnInit {
   awake$ = this.wakeLockService.active$;
 
   cpuTemp$ = this.cpuTempService.cpuTemp$.pipe(map((temp) => Math.round(temp)));
+  isFanActive$ = this.cpuTempService.isFanActive$;
 
   constructor(
     private weatherService: WeatherService,

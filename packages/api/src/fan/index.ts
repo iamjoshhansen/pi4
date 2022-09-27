@@ -18,7 +18,7 @@ export function initFan(app: Express, io: Server) {
   fan.run();
 
   io.on('connection', (client: Socket) => {
-    console.log(`We have a connection!`);
+    console.log(`We have a (fan) connection!`);
     client.on(SocketIoEvent.requestCpuTemp, () => {
       client.emit(SocketIoEvent.cpuTempChange, fan.temp);
 
@@ -29,6 +29,18 @@ export function initFan(app: Express, io: Server) {
       client.on('disconnect', () => {
         clearTimeout(interval);
       });
+    });
+
+    client.on('request-fan-status', () => {
+      const stopListeningForFanChanges = fan.onChange(active => {
+        client.emit('fan:update', active);
+      });
+
+      client.on('disconnect', () => {
+        stopListeningForFanChanges();
+      });
+
+      client.emit('fan:update', fan.isActive);
     });
   });
 

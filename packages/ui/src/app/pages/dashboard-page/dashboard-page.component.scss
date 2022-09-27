@@ -109,6 +109,10 @@
   align-items: flex-start;
   font-family: "JetBrains Mono", monospace;
 
+  &--active {
+    color: #090;
+  }
+
   .deg {
     opacity: 0.33;
     font-size: 0.5em;

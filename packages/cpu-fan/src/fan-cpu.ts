@@ -1,11 +1,15 @@
 import { readFileSync, existsSync } from 'fs';
 import { OutputPin } from '@pi4/gpio';
 
+type ChangeCallback = (active: boolean) => void;
+
 export class FanCPU {
   public readonly pin: number;
   public maxTemp: number;
   public minTemp: number;
   private readonly io: OutputPin;
+
+  private callbacks = new Set<ChangeCallback>();
 
   constructor({
     pin,
@@ -22,6 +26,14 @@ export class FanCPU {
     this.io = new OutputPin(this.pin);
   }
 
+  onChange(cb: ChangeCallback) {
+    this.callbacks.add(cb);
+
+    return () => {
+      this.callbacks.delete(cb);
+    };
+  }
+
   run() {
     this.active = false;
 
@@ -30,9 +42,15 @@ export class FanCPU {
       // console.log(`Temp: ${temp}`);
       if (temp > this.maxTemp && !this.active) {
         this.active = true;
+        for (const cb of this.callbacks) {
+          cb(this.active);
+        }
         console.log(`turning fan on`);
       } else if (temp < this.minTemp && this.active) {
         this.active = false;
+        for (const cb of this.callbacks) {
+          cb(this.active);
+        }
         console.log(`turning fan off`);
       }
     }, 1000);
@@ -43,6 +61,10 @@ export class FanCPU {
   }
   private get active() {
     return this.io.state;
+  }
+
+  get isActive() {
+    return this.active;
   }
 
   get temp(): number {
