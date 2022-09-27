@@ -30,7 +30,7 @@ export class DashboardPageComponent implements OnInit {
 
   awake$ = this.wakeLockService.active$;
 
-  cpuTemp$ = this.cpuTempService.cpuTemp$;
+  cpuTemp$ = this.cpuTempService.cpuTemp$.pipe(map((temp) => Math.round(temp)));
 
   constructor(
     private weatherService: WeatherService,
