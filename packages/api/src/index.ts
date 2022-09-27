@@ -70,7 +70,13 @@ io.on('connection', (socket: Socket) => {
       return;
     }
     console.log(`Speaking:`, message);
-    await speak(message);
+    try {
+      await speak(message);
+    } catch (er) {
+      if (cb) {
+        cb(er as string);
+      }
+    }
     if (cb) {
       cb();
     }
