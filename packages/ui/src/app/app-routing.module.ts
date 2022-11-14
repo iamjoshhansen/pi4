@@ -38,6 +38,14 @@ const routes: Routes = [
     title: 'Wordle Solver',
     component: WordlePageComponent,
   },
+  {
+    path: 'countdown',
+    loadChildren() {
+      return import('./pages/countdown/countdown.module').then(
+        (mod) => mod.CountdownModule
+      );
+    },
+  },
 ];
 
 @NgModule({
